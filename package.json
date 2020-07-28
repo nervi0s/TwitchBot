@@ -1,0 +1,17 @@
+{
+  "name": "twitchbot",
+  "version": "0.0.1",
+  "description": "Primer bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Nervi0s",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.19.2",
+    "dotenv": "^8.2.0",
+    "google-translate-open-api": "^1.3.5",
+    "tmi.js": "^1.5.0"
+  }
+}
