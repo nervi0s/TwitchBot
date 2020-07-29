@@ -7,7 +7,7 @@ function existInChannelInstanceOfAdivina(arrayActiveAdivinaGames, channel) {
     return false;
 }
 
-function existInChannelInstanceOfJuego(arrayConversaciones, channel) {
+function existInChannelInstanceOfConversacion(arrayConversaciones, channel) {
     for (let i = 0; i < arrayConversaciones.length; i++) {
         if (arrayConversaciones[i].getChannel() == channel) {
             return true;
@@ -25,4 +25,4 @@ function isUserAlreadyPlaying(arrayConversaciones, playerName, channel) {
     return false;
 }
 
-module.exports = { existInChannelInstanceOfAdivina, existInChannelInstanceOfJuego, isUserAlreadyPlaying }
+module.exports = { existInChannelInstanceOfAdivina, existInChannelInstanceOfConversacion, isUserAlreadyPlaying }

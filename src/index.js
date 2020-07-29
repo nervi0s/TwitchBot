@@ -1,10 +1,10 @@
 require('dotenv').config()
 
 const utils = require('./utils/utils.js');
-const funcionalities = require('./libs/funcionalities.js');
+const functionalities = require('./libs/functionalities.js');
 
 const AdivinaNum = require('./libs/class/AdivinaNum.js');
-const Conversacion = require('./libs/class/ConversacionNumbers.js');
+const Conversacion = require('./libs/class/ConversacionNum.js');
 
 const tmi = require('tmi.js');
 
@@ -23,7 +23,7 @@ const client = new tmi.Client({
 
 client.connect();
 
-let instanceOfJuego;
+let instanceOfConversacion;
 let arrayConversaciones = [];
 
 let instanceOfAdvina;
@@ -31,7 +31,7 @@ let arrayActiveAdivinaGames = [];
 
 
 client.on('message', async (channel, tags, message, self) => {
-    //console.log(arrayConversaciones)
+
     if (self) return;
     //console.log(tags)
     if (message.toLowerCase() === '!hello') {
@@ -39,35 +39,35 @@ client.on('message', async (channel, tags, message, self) => {
     }
 
 
-    if (funcionalities.existInChannelInstanceOfAdivina(arrayActiveAdivinaGames, channel) == false) {
+    if (functionalities.existInChannelInstanceOfAdivina(arrayActiveAdivinaGames, channel) == false) {
 
-        if (message.toLowerCase() === '!juego') { //crea jugadores/conversaciones para el juego
+        if (message.toLowerCase() === '!juego') { //Crea jugadores/conversaciones para el juego
 
-            if (funcionalities.isUserAlreadyPlaying(arrayConversaciones, tags.username, channel) == false) {
+            if (functionalities.isUserAlreadyPlaying(arrayConversaciones, tags.username, channel) == false) {
                 client.say(channel, `@${tags.username}, Dime un par de números! Recuerda, tienes 15 segundos`);
-                instanceOfJuego = new Conversacion(tags.username, channel);
-                instanceOfJuego.setGameActiveStatus(true);
-                arrayConversaciones.push(instanceOfJuego);
-                instanceOfJuego.autoDelele(arrayConversaciones, tags.username);
+                instanceOfConversacion = new Conversacion(tags.username, channel);
+                instanceOfConversacion.setGameActiveStatus(true);
+                arrayConversaciones.push(instanceOfConversacion);
+                instanceOfConversacion.autoDelele(arrayConversaciones, tags.username, channel);
             } else {
                 client.say(channel, `@${tags.username}, Ya estás jugando!`);
             }
 
         }
-        if (arrayConversaciones.length != 0) { //Si existe alguna instancia del juego
+        if (arrayConversaciones.length != 0 && functionalities.isUserAlreadyPlaying(arrayConversaciones, tags.username, channel)) { //Si existe alguna instancia del juego
 
             if (utils.getNumbersInMsg(message).length != 0) {
                 for (let i = 0; i < arrayConversaciones.length; i++) { //Añade numeros elegidos a cada jugador
                     if (tags.username == arrayConversaciones[i].getNombre() && channel == arrayConversaciones[i].getChannel()) {
-                        console.log(`-----CONSOLE: He encontrado un mensaje de este usuario: @${tags.username} que se puede añadir a la instancia de juego de Suma -----`)
+                        console.log(`-----CONSOLE: He encontrado un mensaje de este usuario: @${tags.username} que se puede añadir a la instancia de juego de Conversacion -----`)
                         let numeros = utils.getNumbersInMsg(message);
 
                         for (let num of numeros) {
                             let rawPhrase = await utils.getNumberPhrase(num);
-                            arrayConversaciones[i].sumandos.push(rawPhrase);
+                            arrayConversaciones[i].rawPhrases.push(rawPhrase);
                         }
 
-                        console.log("-----CONSOLE:", arrayConversaciones, "Array con instancias del juego de suma -----");
+                        console.log("-----CONSOLE:", arrayConversaciones, "Array con instancias del juego de Conversacion -----");
                     }
 
                 }
@@ -76,9 +76,9 @@ client.on('message', async (channel, tags, message, self) => {
 
         for (let i = 0; i < arrayConversaciones.length; i++) {
 
-            if (arrayConversaciones[i].sumandos.length >= 2) {
-                let rawPhrase1 = arrayConversaciones[i].sumandos[0];
-                let rawPhrase2 = arrayConversaciones[i].sumandos[1];
+            if (arrayConversaciones[i].rawPhrases.length >= 2) {
+                let rawPhrase1 = arrayConversaciones[i].rawPhrases[0];
+                let rawPhrase2 = arrayConversaciones[i].rawPhrases[1];
                 arrayConversaciones[i].setGameActiveStatus(false);
                 client.say(channel, `@${arrayConversaciones[i].getNombre()} ${await utils.translatePhrase(rawPhrase1)} ${await utils.translatePhrase(rawPhrase2)}`);
                 arrayConversaciones.splice(i, 1); //Elimina el elemento (en este caso un objeto de la clase Conversacion) que ya ha sido resuelto
@@ -91,16 +91,16 @@ client.on('message', async (channel, tags, message, self) => {
     }
 
 
-    if (funcionalities.existInChannelInstanceOfJuego(arrayConversaciones, channel) == false) {
+    if (functionalities.existInChannelInstanceOfConversacion(arrayConversaciones, channel) == false) {
 
-        if (funcionalities.existInChannelInstanceOfAdivina(arrayActiveAdivinaGames, channel) == false) {
+        if (functionalities.existInChannelInstanceOfAdivina(arrayActiveAdivinaGames, channel) == false) {
 
             if (message.toLowerCase() === '!adivina' && tags.mod) {
 
                 client.say(channel, `Adivina un número entre 1 y 20!`);
                 instanceOfAdvina = new AdivinaNum(tags.username, channel);
                 instanceOfAdvina.setActiveStatus(true);
-                instanceOfAdvina.generateRandom(1, 21);
+                instanceOfAdvina.generateRandom(1, 20);
                 arrayActiveAdivinaGames.push(instanceOfAdvina);
                 console.log("-----CONSOLE:", arrayActiveAdivinaGames, "Array con instancias del juego advina num random -----");
 
@@ -126,7 +126,7 @@ client.on('message', async (channel, tags, message, self) => {
                 if (channel == arrayActiveAdivinaGames[i].getChannel()) {
                     console.log(`-----CONSOLE: He encontrado un mensaje de este usuario: @${tags.username} que se puede añadir al juego de adivina -----`)
                     if (arrayActiveAdivinaGames[i].numRandom == message) {
-                        client.say(channel, `/me @${tags.username} ${arrayActiveAdivinaGames[i].message[channel]}`);
+                        client.say(channel, `/me @${tags.username} ${arrayActiveAdivinaGames[i].message[channel] ? arrayActiveAdivinaGames[i].message[channel] : "lo has acertado!"}`);
                         arrayActiveAdivinaGames.splice(i, 1)
                     }
                 }
@@ -137,11 +137,11 @@ client.on('message', async (channel, tags, message, self) => {
 
     } else {
         if (message.toLowerCase() === '!adivina') {
-            client.say(channel, `El juego de suma está activo,\nespera a que acabe para usar ese comando :)`);
+            client.say(channel, `El juego de datos curiosos sobre los números está activo,\nespera a que acabe para usar ese comando :)`);
         }
     }
 
-    //console.log("-----CONSOLE:", arrayConversaciones, "Array con instancias del juego de suma -----"); //Para depurar
+    //console.log("-----CONSOLE:", arrayConversaciones, "Array con instancias del juego de Conversacion -----"); //Para depurar
     //console.log("-----CONSOLE:", arrayActiveAdivinaGames, "Array con instancias del juego advina num random -----"); //Para depurar
 
 });
@@ -150,4 +150,4 @@ client.on('message', async (channel, tags, message, self) => {
     //[OK] Hacer que solo se pueda participar 1 vez hasta que sea haya "resuelto" el juego
     // Crear archivo en el disco con la gente que ha participado en el juego
     //[OK] Si alguien ha abiero un juego y ha pasado algún tiempo elimar ese objeto y al player
-    //[OK] Hacer que el juego de la suma "elime isntancias al cabo de un tiempo" --> justo despues del push
+    //[OK] Hacer que el juego de la Conversacion "elime isntancias al cabo de un tiempo" --> justo despues del push

@@ -9,10 +9,10 @@ class AdivinaNum {
             "#popitas123": "Bingo! lo has adivinado! FootGoal"
         }
     }
-    generateRandom(minIncluded, maxExcluded) {
+    generateRandom(minIncluded, maxIncluded) {
         minIncluded = Math.ceil(minIncluded);
-        maxExcluded = Math.floor(maxExcluded);
-        this.numRandom = Math.floor(Math.random() * (maxExcluded - minIncluded + 1)) + minIncluded;
+        maxIncluded = Math.floor(maxIncluded);
+        this.numRandom = Math.floor(Math.random() * (maxIncluded - minIncluded + 1)) + minIncluded;
     }
     getChannel() {
         return this.channel;

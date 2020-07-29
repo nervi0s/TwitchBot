@@ -4,7 +4,7 @@ class Conversacion {
         this.who = who;
         this.channel = channel;
         this.activeStatus = false;
-        this.sumandos = [];
+        this.rawPhrases = [];
     }
 
     getNombre() {
@@ -17,12 +17,13 @@ class Conversacion {
         this.activeStatus = activeStatus;
     }
 
-    autoDelele(array, user) {
+    autoDelele(array, user, channel) {
         if (array.length > 0) {
             setTimeout(() => {
                 for (let i = 0; i < array.length; i++) {
-                    if (array[i].activeStatus == true && array[i].getNombre() == user) {
-                        console.log("Juego's instance autoclean");
+                    if (array[i].activeStatus == true && array[i].getNombre() == user && array[i].getChannel() == channel) {
+                        console.log("Conversacion's instance autoclean");
+                        //console.log(array[i])
                         array.splice(i, 1);
                     }
                 }
