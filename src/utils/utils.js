@@ -46,4 +46,36 @@ async function translatePhrase(rawPhrase) {
     return frase;
 }
 
-module.exports = { convertToNumber, isNumber, getNumbersInMsg, getNumberPhrase, translatePhrase }
+function isRequestToTransformToBinary(phrase) {
+
+    let modifiedPhrase;
+    let isMatch;
+    let decimalNumber;
+
+    modifiedPhrase = phrase.replace(/[.]|[,]/g, "");
+    isMatch = modifiedPhrase.match(/[0-9]+ a binario/gi);
+
+    if (isMatch) {
+        decimalNumber = isMatch[0].split(" ")[0];
+        return decimalNumber;
+    }
+    else {
+        return false;
+    }
+}
+
+function toBinay(integerNumber) {
+
+    let arrayWithRest = [];
+
+    do {
+        arrayWithRest.push(integerNumber % 2);
+        //console.log(integerNumber);
+        integerNumber = parseInt(integerNumber / 2);
+    } while (integerNumber != 0)
+    //console.log(arrayWithRest.reverse());
+    return arrayWithRest.reverse().toString().replace(/,/g, "");
+}
+
+
+module.exports = { convertToNumber, isNumber, getNumbersInMsg, getNumberPhrase, translatePhrase, isRequestToTransformToBinary, toBinay }

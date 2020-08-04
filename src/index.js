@@ -54,7 +54,7 @@ client.on('message', async (channel, tags, message, self) => {
             }
 
         }
-        if (arrayConversaciones.length != 0 && functionalities.isUserAlreadyPlaying(arrayConversaciones, tags.username, channel)) { //Si existe alguna instancia del juego
+        if (arrayConversaciones.length != 0 && functionalities.isUserAlreadyPlaying(arrayConversaciones, tags.username, channel)) { //Si existe alguna instancia del juego Y el mensaje que recibo es de un player
 
             if (utils.getNumbersInMsg(message).length != 0) {
                 for (let i = 0; i < arrayConversaciones.length; i++) { //Añade numeros elegidos a cada jugador
@@ -141,6 +141,12 @@ client.on('message', async (channel, tags, message, self) => {
         }
     }
 
+    if (utils.isRequestToTransformToBinary(message)) {
+        let number = utils.isRequestToTransformToBinary(message);
+        client.say(channel, `.me @${tags.username} ${number} en binario es ${utils.toBinay(number)}`);
+
+    }
+
     //console.log("-----CONSOLE:", arrayConversaciones, "Array con instancias del juego de Conversacion -----"); //Para depurar
     //console.log("-----CONSOLE:", arrayActiveAdivinaGames, "Array con instancias del juego advina num random -----"); //Para depurar
 
@@ -148,6 +154,6 @@ client.on('message', async (channel, tags, message, self) => {
 
     //toDo:
     //[OK] Hacer que solo se pueda participar 1 vez hasta que sea haya "resuelto" el juego
-    // Crear archivo en el disco con la gente que ha participado en el juego
+    //[  ] Crear una base de datos con los participantes del juego.
     //[OK] Si alguien ha abiero un juego y ha pasado algún tiempo elimar ese objeto y al player
     //[OK] Hacer que el juego de la Conversacion "elime isntancias al cabo de un tiempo" --> justo despues del push
