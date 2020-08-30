@@ -154,6 +154,6 @@ client.on('message', async (channel, tags, message, self) => {
 
     //toDo:
     //[OK] Hacer que solo se pueda participar 1 vez hasta que sea haya "resuelto" el juego
-    //[  ] Crear una base de datos con los participantes del juego.
+    //[--] Crear una base de datos con los participantes del juego.
     //[OK] Si alguien ha abiero un juego y ha pasado algún tiempo elimar ese objeto y al player
     //[OK] Hacer que el juego de la Conversacion "elime isntancias al cabo de un tiempo" --> justo despues del push
