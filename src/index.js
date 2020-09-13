@@ -44,7 +44,7 @@ client.on('message', async (channel, tags, message, self) => {
         if (message.toLowerCase() === '!juego') { //Crea jugadores/conversaciones para el juego
 
             if (functionalities.isUserAlreadyPlaying(arrayConversaciones, tags.username, channel) == false) {
-                client.say(channel, `@${tags.username}, Dime un par de números! Recuerda, tienes 15 segundos`);
+                client.say(channel, `@${tags.username} dime un par de números! Recuerda, tienes 15 segundos`);
                 instanceOfConversacion = new Conversacion(tags.username, channel);
                 instanceOfConversacion.setGameActiveStatus(true);
                 arrayConversaciones.push(instanceOfConversacion);
@@ -58,7 +58,7 @@ client.on('message', async (channel, tags, message, self) => {
 
             if (utils.getNumbersInMsg(message).length != 0) {
                 for (let i = 0; i < arrayConversaciones.length; i++) { //Añade numeros elegidos a cada jugador
-                    if (tags.username == arrayConversaciones[i].getNombre() && channel == arrayConversaciones[i].getChannel()) {
+                    if (tags.username == arrayConversaciones[i].getName() && channel == arrayConversaciones[i].getChannel()) {
                         console.log(`-----CONSOLE: He encontrado un mensaje de este usuario: @${tags.username} que se puede añadir a la instancia de juego de Conversacion -----`)
                         let numeros = utils.getNumbersInMsg(message);
 
@@ -80,7 +80,7 @@ client.on('message', async (channel, tags, message, self) => {
                 let rawPhrase1 = arrayConversaciones[i].rawPhrases[0];
                 let rawPhrase2 = arrayConversaciones[i].rawPhrases[1];
                 arrayConversaciones[i].setGameActiveStatus(false);
-                client.say(channel, `@${arrayConversaciones[i].getNombre()} ${await utils.translatePhrase(rawPhrase1)} ${await utils.translatePhrase(rawPhrase2)}`);
+                client.say(channel, `.me @${arrayConversaciones[i].getName()} ${await utils.translatePhrase(rawPhrase1)} ${await utils.translatePhrase(rawPhrase2)}`);
                 arrayConversaciones.splice(i, 1); //Elimina el elemento (en este caso un objeto de la clase Conversacion) que ya ha sido resuelto
             }
         }

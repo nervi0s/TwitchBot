@@ -7,12 +7,14 @@ class Conversacion {
         this.rawPhrases = [];
     }
 
-    getNombre() {
+    getName() {
         return this.who;
     }
+
     getChannel() {
         return this.channel;
     }
+
     setGameActiveStatus(activeStatus) {
         this.activeStatus = activeStatus;
     }
@@ -21,7 +23,7 @@ class Conversacion {
         if (array.length > 0) {
             setTimeout(() => {
                 for (let i = 0; i < array.length; i++) {
-                    if (array[i].activeStatus == true && array[i].getNombre() == user && array[i].getChannel() == channel) {
+                    if (array[i].activeStatus == true && array[i].getName() == user && array[i].getChannel() == channel) {
                         console.log("Conversacion's instance autoclean");
                         //console.log(array[i])
                         array.splice(i, 1);

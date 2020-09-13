@@ -18,7 +18,7 @@ function existInChannelInstanceOfConversacion(arrayConversaciones, channel) {
 
 function isUserAlreadyPlaying(arrayConversaciones, playerName, channel) {
     for (let i = 0; i < arrayConversaciones.length; i++) {
-        if (arrayConversaciones[i].getNombre() == playerName && arrayConversaciones[i].getChannel() == channel) {
+        if (arrayConversaciones[i].getName() == playerName && arrayConversaciones[i].getChannel() == channel) {
             return true;
         }
     }

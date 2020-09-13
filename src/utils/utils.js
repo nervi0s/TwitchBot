@@ -20,15 +20,13 @@ function getNumbersInMsg(msg) {
     **If the msg doesn't contain numbers: msg = "blabla bla bla bla...."
     **then this will return a empty array: []
     */
-    let stringArrayWithNumbers = msg.match(/[0-9][.0-9]*/g);
+    let stringArrayWithNumbers = msg.match(/[0-9]+[.]?[0-9]*/g);
     console.log(stringArrayWithNumbers, "Array del jugador con los número encontrados en su mensaje");
     let extractedNumbers = [];
 
     if (stringArrayWithNumbers != null) {
         for (strNumeric of stringArrayWithNumbers) {
-            if (!isNaN(strNumeric)) {//Only push into extractedNumbers if and only if (iff) the element in array is a number
-                extractedNumbers.push(convertToNumber(strNumeric));
-            }
+            extractedNumbers.push(convertToNumber(strNumeric));
         }
     }
     return extractedNumbers;
